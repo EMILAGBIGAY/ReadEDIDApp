@@ -1,0 +1,5 @@
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\publish\o_EDID.exe
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\publish\o_EDID.dll
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\publish\o_EDID.deps.json
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\publish\o_EDID.runtimeconfig.json
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\publish\o_EDID.pdb

@@ -1,0 +1,15 @@
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\o_EDID.exe
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\o_EDID.deps.json
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\o_EDID.runtimeconfig.json
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\o_EDID.dll
+C:\Users\Quake\OneDrive\Documents\o_EDID\bin\Debug\net7.0\o_EDID.pdb
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\o_EDID.csproj.AssemblyReference.cache
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\o_EDID.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\o_EDID.AssemblyInfoInputs.cache
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\o_EDID.AssemblyInfo.cs
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\o_EDID.csproj.CoreCompileInputs.cache
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\o_EDID.dll
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\refint\o_EDID.dll
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\o_EDID.pdb
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\o_EDID.genruntimeconfig.cache
+C:\Users\Quake\OneDrive\Documents\o_EDID\obj\Debug\net7.0\ref\o_EDID.dll

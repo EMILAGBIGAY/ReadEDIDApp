@@ -1,0 +1,15 @@
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\bin\Debug\net7.0\test_EDID_reader.exe
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\bin\Debug\net7.0\test_EDID_reader.deps.json
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\bin\Debug\net7.0\test_EDID_reader.runtimeconfig.json
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\bin\Debug\net7.0\test_EDID_reader.dll
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\bin\Debug\net7.0\test_EDID_reader.pdb
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\test_EDID_reader.csproj.AssemblyReference.cache
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\test_EDID_reader.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\test_EDID_reader.AssemblyInfoInputs.cache
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\test_EDID_reader.AssemblyInfo.cs
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\test_EDID_reader.csproj.CoreCompileInputs.cache
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\test_EDID_reader.dll
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\refint\test_EDID_reader.dll
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\test_EDID_reader.pdb
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\test_EDID_reader.genruntimeconfig.cache
+C:\Users\Quake\OneDrive\Documents\test_EDID_reader\obj\Debug\net7.0\ref\test_EDID_reader.dll

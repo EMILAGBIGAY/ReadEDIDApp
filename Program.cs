@@ -1,57 +1,70 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Win32;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Collections.Generic;
+using Windows.Devices.Display;
+using Windows.Devices.Enumeration;
 
-class Program
-{   
-    [SuppressMessage("Microsoft.Usage", "CA1416:ThisCallSiteIsReachableOnAllPlatforms", Justification = "Intentionally targeting Windows platform.")]
-    static void Main()
-    {   
-        //path to EDID.reg file
-        string registryPath = @"SYSTEM\CurrentControlSet\Enum\DISPLAY\DELD08E\5&2291a7e&0&UID4352\Device Parameters";
-        //string registryPath = @"SYSTEM\CurrentControlSet\Enum\DISPLAY\CMN1451\4&34803ba9&0&UID8388688\Device Parameters";
-        string outputFilePath = "output.txt"; // File path for the output file
 
-        try
+namespace EDID.Core.cs
+{
+    class Program
+    {
+        [SuppressMessage("Microsoft.Usage", "CA1416:ThisCallSiteIsReachableOnAllPlatforms", Justification = "Intentionally targeting Windows platform.")]
+        static void Main(string[] args)
+        {   
+            string[] files = {"output1.txt", "output2.txt"};
+            string[] EDIDInfo = {"EDIDInformation1.txt", "EDIDInformation2.txt"};
+
+            var devices = new EnumerateDevices(DisplayMonitor.GetDeviceSelector());
+
+            for(int i = 0; i < files.Length;i++){
+                devices.EnumDisplay(files[i],i);
+
+                Process processInstance = new Process();
+                using (StreamWriter writer = new StreamWriter(EDIDInfo[i])){}
+                processInstance.ParseEDID(files[i],EDIDInfo[i]);
+            }
+            
+
+        }
+        
+        class EnumerateDevices
         {
-            // Open the registry key
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath))
+            readonly List<DeviceInformation> deviceList = new List<DeviceInformation>();
+
+            public EnumerateDevices(string selector) 
             {
-                // Check if the key exists
-                if (key != null)
-                {
-                    // Export the key values to a .reg file
-                    string[] valueNames = key.GetValueNames();
-                    string regFileContent = "Windows Registry Editor Version 5.00\n\n";
-                    regFileContent += $"[{key.Name}]\n";
-                    foreach (string valueName in valueNames)
-                    {
-                        object value = key.GetValue(valueName);
-                        if (value is byte[] byteValue)
-                        {
-                            string hexValue = BitConverter.ToString(byteValue).Replace("-", " ");
-                            regFileContent += $"\"{valueName}\"=hex:{hexValue}\n";
-                        }
-                        else if (value != null)
-                        {
-                            regFileContent += $"\"{valueName}\"=\"{value}\"\n";
-                        }
-                    }
+                EnumDevices(selector);
+            }
 
-                    // Save the content to a file
-                    Console.WriteLine(regFileContent);
-                    File.WriteAllText(outputFilePath, regFileContent);
+            
+            private async void EnumDevices(string selector = null)
+            {
+                var devices = await DeviceInformation.FindAllAsync(selector);
 
-                    Console.WriteLine($"Content saved to {outputFilePath}");
-                }
-                else
+                if (devices.Count > 0)
+                    for (var i = 0; i < devices.Count; i++) 
+                        deviceList.Add(devices[i]);
+            }
+
+            
+            public async void EnumDisplay(string outputFilePath,int index)
+            {   
+                if (index != 0) Console.WriteLine();
+                DisplayMonitor display = await DisplayMonitor.FromInterfaceIdAsync(deviceList[index].Id);
+                byte[] EDID = display.GetDescriptor(DisplayMonitorDescriptorKind.Edid);
+
+                string hexBuffer = BitConverter.ToString(EDID).Replace("-", " ");
+                Console.Write(hexBuffer + "\n");
+                using (StreamWriter writer = new StreamWriter(outputFilePath))
                 {
-                    Console.WriteLine("Registry key not found.");
+                    writer.Write("\"EDID\"=hex:");
+                    writer.WriteLine(hexBuffer + "\n");
                 }
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine("An error occurred: " + ex.Message);
-        }
+
     }
+
 }

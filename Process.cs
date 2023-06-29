@@ -1,14 +1,11 @@
-﻿using System;
-using System.Drawing;
+using System;
 using System.IO;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Xml;
+using System.Linq;
+
 
 class Process
 {   
-    static void HeaderInfo(string edidData)
+    static void HeaderInfo(string edidData, string file)
     {
         string header = edidData.Substring(0, 16);
         string manufacturerID = edidData.Substring(16, 4);
@@ -43,47 +40,95 @@ class Process
         string edidRevision = edidData.Substring(38, 2);
         
         //doesnt support value of 255
-        Console.WriteLine("Header: " + header);
-        Console.WriteLine("Manufacturer ID: " + ManId);
-        Console.WriteLine("Product ID Code: " + productIDCodeMSB + productIDCodeLSB + "h");
-        Console.WriteLine("Serial Number: " + serialNumber68 + serialNumber46 + serialNumber24 + serialNumber02 +"h");
+        
+        using (StreamWriter writer = new StreamWriter(file, true))
+        {
+            writer.WriteLine("Header: " + header);
+            writer.WriteLine("Manufacturer ID: " + ManId);
+            writer.WriteLine("Product ID Code: " + productIDCodeMSB + productIDCodeLSB + "h");
+            writer.WriteLine("Serial Number: " + serialNumber68 + serialNumber46 + serialNumber24 + serialNumber02 +"h");
 
-        int ManufactureDateWeekDecimal = int.Parse(manufactureDateWeek, System.Globalization.NumberStyles.HexNumber);
-        Console.WriteLine("Manufacture Week: " + ManufactureDateWeekDecimal);   
+            int ManufactureDateWeekDecimal = int.Parse(manufactureDateWeek, System.Globalization.NumberStyles.HexNumber);
+            writer.WriteLine("Manufacture Week: " + ManufactureDateWeekDecimal);   
 
-        int ManufactureDateYearDecimal = int.Parse(manufactureDateYear, System.Globalization.NumberStyles.HexNumber);
-        Console.WriteLine("Manufacture Year: " + (ManufactureDateYearDecimal+1990));
-
-        Console.WriteLine("EDID Version #: " + edidVersion);
-        Console.WriteLine("EDID Revision #: " + edidRevision);
+            int ManufactureDateYearDecimal = int.Parse(manufactureDateYear, System.Globalization.NumberStyles.HexNumber);
+            writer.WriteLine("Manufacture Year: " + (ManufactureDateYearDecimal+1990));
+            writer.WriteLine("EDID Version #: " + edidVersion);
+            writer.WriteLine("EDID Revision #: " + edidRevision);
+        }
+        
     }
-    static void BasicDisplayParameters(string edidData)
+    static void BasicDisplayParameters(string edidData, string file)
     {
         string videoInputType = edidData.Substring(0, 1);
-        //string videoInputInterface = edidData.Substring(41, 1);
         //40 1 = digital, 0 = analog
         //41 digital:interface 
         string horizontalSize = edidData.Substring(2, 2);
         string verticalSize = edidData.Substring(4, 2);
         string displayGamma = edidData.Substring(6, 2);
 
-        int videoInputTypeDecimal = int.Parse(videoInputType, System.Globalization.NumberStyles.HexNumber);
-        if(videoInputTypeDecimal >= 8)
-            Console.WriteLine("Video Input Type: Digital");
-        else
-            Console.WriteLine("Video Input Type: Analog");
-        
-        int horizontalDecimal = int.Parse(horizontalSize, System.Globalization.NumberStyles.HexNumber);
-        Console.WriteLine("Horizontal Size: " + horizontalDecimal + " cm");
-        
-        int verticalDecimal = int.Parse(verticalSize, System.Globalization.NumberStyles.HexNumber);
-        Console.WriteLine("Vertical Size: " + verticalDecimal + " cm");
+        using (StreamWriter writer = new StreamWriter(file,true ))
+        {
+            int videoInputTypeDecimal = int.Parse(videoInputType, System.Globalization.NumberStyles.HexNumber);
+            int videoInputInterface = int.Parse(edidData.Substring(1, 1), System.Globalization.NumberStyles.HexNumber);
+            if(videoInputTypeDecimal >= 8){
+                writer.WriteLine("Video Input Type: Digital");
 
-        double displayGammaDecimal = int.Parse(displayGamma, System.Globalization.NumberStyles.HexNumber);
-        displayGammaDecimal = (displayGammaDecimal+100)/100;
-        Console.WriteLine("Display Gamma: " + displayGammaDecimal);
+                if(videoInputTypeDecimal == 9){
+                    writer.WriteLine("Color Bit Depth: 6 Bits per Primary Color");
+                }  
+                else if(videoInputTypeDecimal == 10){
+                    writer.WriteLine("Color Bit Depth: 8 Bits per Primary Color");
+                }
+                else if(videoInputTypeDecimal == 11){
+                    writer.WriteLine("Color Bit Depth: 10 Bits per Primary Color");
+                }
+                else if(videoInputTypeDecimal == 12){
+                    writer.WriteLine("Color Bit Depth: 12 Bits per Primary Color");
+                }
+                else if (videoInputTypeDecimal == 13){
+                    writer.WriteLine("Color Bit Depth: 14 Bits per Primary Color");
+                }
+                else if(videoInputTypeDecimal == 14){
+                    writer.WriteLine("Color Bit Depth: 16 Bits per Primary Color");
+                }
+                else if(videoInputTypeDecimal == 15){
+                    writer.WriteLine("Color Bit Depth: reserved");
+                }
+
+                if(videoInputInterface == 1){
+                    writer.WriteLine("DVI is supported");
+                }  
+                else if(videoInputInterface == 2){
+                    writer.WriteLine("HDMIa is supported");
+                }
+                else if(videoInputInterface == 3){
+                    writer.WriteLine("HDMIb is supported");
+                }
+                else if(videoInputInterface == 4){
+                    writer.WriteLine("MDDI is supported");
+                }
+                else if (videoInputInterface == 5){
+                    writer.WriteLine("Display Port is supported");
+                }     
+            }
+            else{
+                writer.WriteLine("Video Input Type: Analog");
+            }
+
+            int horizontalDecimal = int.Parse(horizontalSize, System.Globalization.NumberStyles.HexNumber);
+            writer.WriteLine("Horizontal Size: " + horizontalDecimal + " cm");
+            
+            int verticalDecimal = int.Parse(verticalSize, System.Globalization.NumberStyles.HexNumber);
+            writer.WriteLine("Vertical Size: " + verticalDecimal + " cm");
+
+            double displayGammaDecimal = int.Parse(displayGamma, System.Globalization.NumberStyles.HexNumber);
+            displayGammaDecimal = (displayGammaDecimal+100)/100;
+            writer.WriteLine("Display Gamma: " + displayGammaDecimal);
+        }
+        
     }
-    static void SupportedFeaturesBitmap(string edidData)
+    static void SupportedFeaturesBitmap(string edidData, string file)
     {
         string[] support = new string[8];
         string supportedFeatures = edidData.Substring(0, 2);
@@ -123,15 +168,19 @@ class Process
             ColorValue = "RGB:4:4:4 + YCrCb:4:4:4 + YCrCb:4:2:2";
         }
 
-        Console.WriteLine("Display Frequency is continuous frequency : " + support[7]);
-        Console.WriteLine("Preferred Timing Mode includes the native pixel format and preferred refresh rate of display device :" + support[6]);
-        Console.WriteLine("sRGB Standard is the default color space : " + support[5]);
-        Console.WriteLine("Supported Color Encoding Formats : " + ColorValue);
-        Console.WriteLine("Active Off : " + support[2]);
-        Console.WriteLine("Suspend Mode : " + support[1]);
-        Console.WriteLine("Standby Mode : " + support[0]);
+        using (StreamWriter writer = new StreamWriter(file, true))
+        {
+            writer.WriteLine("Display Frequency is continuous frequency: " + support[7]);
+            writer.WriteLine("Preferred Timing Mode includes the native pixel format and preferred refresh rate of display device: " + support[6]);
+            writer.WriteLine("sRGB Standard is the default color space: " + support[5]);
+            writer.WriteLine("Supported Color Encoding Formats: " + ColorValue);
+            writer.WriteLine("Active Off: " + support[2]);
+            writer.WriteLine("Suspend Mode: " + support[1]);
+            writer.WriteLine("Standby Mode: " + support[0]);
+        }
+        
     }
-    static void ChromaticCoordinates(string edidData)
+    static void ChromaticCoordinates(string edidData, string file)
     {
         string Rsig = edidData.Substring(0, 1);//25     EE 1110 1110      Red X 1010 0011 11
         string Gsig = edidData.Substring(1, 1);
@@ -228,16 +277,20 @@ class Process
 
         ChromeValues[7] = Math.Round(WhiteYDouble, 5);
 
-        Console.WriteLine("Red X Value: " +ChromeValues[0]);
-        Console.WriteLine("Red Y Value: " +ChromeValues[1]);
-        Console.WriteLine("Green X Value: " +ChromeValues[2]);
-        Console.WriteLine("Green Y Value: " +ChromeValues[3]);
-        Console.WriteLine("Blue X Value: " +ChromeValues[4]);
-        Console.WriteLine("Blue Y Value: " +ChromeValues[5]);
-        Console.WriteLine("White X Value: " +ChromeValues[6]);
-        Console.WriteLine("White Y Value: " +ChromeValues[7]);
+        using (StreamWriter writer = new StreamWriter(file, true))
+        {
+            writer.WriteLine("Red X Value: " +ChromeValues[0]);
+            writer.WriteLine("Red Y Value: " +ChromeValues[1]);
+            writer.WriteLine("Green X Value: " +ChromeValues[2]);
+            writer.WriteLine("Green Y Value: " +ChromeValues[3]);
+            writer.WriteLine("Blue X Value: " +ChromeValues[4]);
+            writer.WriteLine("Blue Y Value: " +ChromeValues[5]);
+            writer.WriteLine("White X Value: " +ChromeValues[6]);
+            writer.WriteLine("White Y Value: " +ChromeValues[7]);
+        }
+        
     }
-    static void TimingsInfo(string edidData)
+    static void TimingsInfo(string edidData, string refresh, string file)
     {
         string establishedSupportTimings = edidData.Substring(0, 4);
         string manufacturerReservedTiming = edidData.Substring(4, 2);
@@ -245,10 +298,7 @@ class Process
         string StdTime = edidData.Substring(8, 2);
 
         string TimeBits = Convert.ToString(Convert.ToInt32(StdTime, 16), 2).PadLeft(8, '0');
-        string RefreshRate = TimeBits.Substring(2,6);
-        string binaryRate = Convert.ToString(Convert.ToInt32(RefreshRate, 16), 2);
-        long RefreshDecimal = Convert.ToInt64(binaryRate, 2);
-        RefreshDecimal += 60;
+        
 
         //string AspRatio = TimeBits.Substring(0, 2);
 
@@ -262,12 +312,17 @@ class Process
         // }else if(AspOut == "11"){
         //     AspOut = "16:9";
         // }
-        Console.WriteLine("Established Support Timings: " + establishedSupportTimings);
-        Console.WriteLine("Manufacturer's Reserved Timing: " + manufacturerReservedTiming);
-        Console.WriteLine("EDID Standard Timings Supported: " + edidStandardTimingsSupported);
-        Console.WriteLine("Refresh Rate: "+RefreshDecimal+ "(Hz)");
+
+        using (StreamWriter writer = new StreamWriter(file, true))
+        {
+            writer.WriteLine("Established Support Timings: " + establishedSupportTimings);
+            writer.WriteLine("Manufacturer's Reserved Timing: " + manufacturerReservedTiming);
+            writer.WriteLine("EDID Standard Timings Supported: " + edidStandardTimingsSupported);
+            writer.WriteLine("Refresh Rate: "+(Convert.ToInt32(refresh, 16)+60)+ "(Hz)");
+        }
+        
     }
-    static void ProcessTimingBlock(string TimingBlock)
+    static void ProcessTimingBlock(string TimingBlock, string file)
     {
         string  pixelClockLsb = TimingBlock.Substring(0, 2);
         string pixelClockMsb = TimingBlock.Substring(2, 2);
@@ -383,7 +438,7 @@ class Process
                 SyncInfo[3] = "Vertical Sync: Negative";
             }
             else if (FeaturesBitmap[5] == '1'){
-                SyncInfo[3] = "Vertical Sync : Positive";
+                SyncInfo[3] = "Vertical Sync: Positive";
             }
 
             if(FeaturesBitmap[6] == '0'){
@@ -393,36 +448,99 @@ class Process
                 SyncInfo[4] = "Horizontal Sync: Positive";
             } 
         }
-        Console.WriteLine("Detailed Timing: ");
-        Console.WriteLine("Pixel Clock: "+"{0:0.00}", pixelDouble +" MHz");
-        Console.WriteLine("Horizontal Active Width: "+ Convert.ToInt32(HorizontalActiveWidth, 16) + " pixels");
-        Console.WriteLine("Horizontal Blanking Width: "+ Convert.ToInt32(HorizontalBlankingWidth, 16) + " pixels");
-        Console.WriteLine("Horizontal Addressable Width: "+ Convert.ToInt32(HorizontalImageSize, 16) + " mm");
-        Console.WriteLine("Horizontal Front Porch: "+Convert.ToInt32(HorizontalFrontPorch, 2)+ " pixels");
-        Console.WriteLine("Horizontal Sync Pulse: "+Convert.ToInt32(HorizontalSyncPulse, 2)+ " pixels");
-        Console.WriteLine("Horizontal Border: "+ Convert.ToInt32(HorizontalBorder, 16) + " pixels");
 
-        Console.WriteLine("Vertical Active Width: "+ Convert.ToInt32(VerticalActiveWidth, 16) + " lines");
-        Console.WriteLine("Vertical Blanking Width: "+ Convert.ToInt32(VerticalBlankingWidth, 16) + " lines");
-        Console.WriteLine("Vertical Addressable Width: "+ Convert.ToInt32(VerticalImageSize, 16) + " mm");
-        Console.WriteLine("Vertical Front Porch: "+Convert.ToInt32(VerticalFrontPorch, 2)+ " lines");
-        Console.WriteLine("Vertical Sync Pulse: "+Convert.ToInt32(VerticalSyncPulse, 2)+ " lines");
-        Console.WriteLine("Vertical Border: "+ Convert.ToInt32(VerticalBorder, 16) + " lines");
-        Console.WriteLine("Sync Signal Information:");
-        for(int i = 0;i < SyncInfo.Length; i++){
-            Console.WriteLine(SyncInfo[i]);
+        using (StreamWriter writer = new StreamWriter(file, true))
+        {
+            writer.WriteLine("Detailed Timing: ");
+            writer.WriteLine("Pixel Clock: "+"{0:0.00}", pixelDouble +" MHz");
+            writer.WriteLine("Horizontal Active Width: "+ Convert.ToInt32(HorizontalActiveWidth, 16) + " pixels");
+            writer.WriteLine("Horizontal Blanking Width: "+ Convert.ToInt32(HorizontalBlankingWidth, 16) + " pixels");
+            writer.WriteLine("Horizontal Addressable Width: "+ Convert.ToInt32(HorizontalImageSize, 16) + " mm");
+            writer.WriteLine("Horizontal Front Porch: "+Convert.ToInt32(HorizontalFrontPorch, 2)+ " pixels");
+            writer.WriteLine("Horizontal Sync Pulse: "+Convert.ToInt32(HorizontalSyncPulse, 2)+ " pixels");
+            writer.WriteLine("Horizontal Border: "+ Convert.ToInt32(HorizontalBorder, 16) + " pixels");
+
+            writer.WriteLine("Vertical Active Width: "+ Convert.ToInt32(VerticalActiveWidth, 16) + " lines");
+            writer.WriteLine("Vertical Blanking Width: "+ Convert.ToInt32(VerticalBlankingWidth, 16) + " lines");
+            writer.WriteLine("Vertical Addressable Width: "+ Convert.ToInt32(VerticalImageSize, 16) + " mm");
+            writer.WriteLine("Vertical Front Porch: "+Convert.ToInt32(VerticalFrontPorch, 2)+ " lines");
+            writer.WriteLine("Vertical Sync Pulse: "+Convert.ToInt32(VerticalSyncPulse, 2)+ " lines");
+            writer.WriteLine("Vertical Border: "+ Convert.ToInt32(VerticalBorder, 16) + " lines");
+            writer.WriteLine("Sync Signal Information:");
+            for(int i = 0;i < SyncInfo.Length; i++){
+                writer.WriteLine(SyncInfo[i]);
+            }
         }
+
+        
     }
-    static void ExtraFlags(string edidData)
+    static void AplhaData(string edidData, string file)
+    {   
+        char[] alph = new char[edidData.Length/2]; 
+        int count = 4;
+        int index = 0;
+        if(edidData.Substring(0,2) == "FE"){
+            while(edidData.Substring(count,2) != "0A" && edidData.Substring(count,2) != "00" && count<=edidData.Length-1){
+                alph[index] = Convert.ToChar(Convert.ToByte(edidData.Substring(count,2), 16));
+                index++;
+                count += 2;
+            }
+            //string alphStr = new string(alph); 
+            int nullCount = Array.IndexOf(alph, '\0');
+            if (nullCount >= 0)
+            {
+                Array.Resize(ref alph, nullCount);
+            }
+            using (StreamWriter writer = new StreamWriter(file, true))
+            {
+                writer.WriteLine(alph);
+            }
+            /*for(int i = 0; i < files.Length; i++)
+            {
+                var devices = new EnumerateDevices(DisplayMonitor.GetDeviceSelector());
+                devices.EnumDisplay(files[i]);
+
+                Process processInstance = new Process();
+                using (StreamWriter writer = new StreamWriter("EDIDInformation.txt")){}
+                processInstance.ParseEDID(files[i]);
+            }*/
+        }
+        // char Asc1 = Convert.ToChar(Convert.ToByte(edidData.Substring(0,2), 16));
+        // char Asc2 = Convert.ToChar(Convert.ToByte(edidData.Substring(2,2), 16));
+        // char Asc3 = Convert.ToChar(Convert.ToByte(edidData.Substring(4,2), 16));
+        // char Asc4 = Convert.ToChar(Convert.ToByte(edidData.Substring(6,2), 16));
+        // char Asc5 = Convert.ToChar(Convert.ToByte(edidData.Substring(8,2), 16));
+
+        // char Pin1 = Convert.ToChar(Convert.ToByte(edidData.Substring(12,2), 16));
+        // char Pin2 = Convert.ToChar(Convert.ToByte(edidData.Substring(14,2), 16));
+        // char Pin3 = Convert.ToChar(Convert.ToByte(edidData.Substring(16,2), 16));
+        // char Pin4 = Convert.ToChar(Convert.ToByte(edidData.Substring(18,2), 16));
+        // char Pin5 = Convert.ToChar(Convert.ToByte(edidData.Substring(20,2), 16));
+        // char Pin6 = Convert.ToChar(Convert.ToByte(edidData.Substring(22,2), 16));
+    }
+    static void ManuDisplayDescriptor(string edidData, string file){
+        if(edidData.Substring(6, 2) == "00"){
+            using (StreamWriter writer = new StreamWriter(file, true))
+            {
+                writer.WriteLine("Manufacturer (00h) Display Descriptor: " +edidData);
+            }
+        }
+        
+    }   
+    static void ExtraFlags(string edidData, string file)
     {
         string extensionFlag = edidData.Substring(0, 2);
         string checksum = edidData.Substring(2, 2);
 
-        Console.WriteLine("Extension Flag: " + extensionFlag + "h");
-        Console.WriteLine("Checksum: " + checksum + "h") ;
+        using (StreamWriter writer = new StreamWriter(file, true))
+        {
+            writer.WriteLine("Extension Flag: " + extensionFlag + "h");
+            writer.WriteLine("Checksum: " + checksum + "h") ;
+        }
+        
     }
-    static void ProcessEDID(string filePath)
-    {
+    public void ParseEDID(string filePath, string EDIDInformation)
+    {   
         string edidData = File.ReadAllText(filePath);
 
         // Find the starting index of "EDID"=hex:
@@ -430,16 +548,28 @@ class Process
         if (startIndex != -1)
         {
             startIndex += "\"EDID\"=hex:".Length;
+            
+            using (StreamWriter writer = new StreamWriter(EDIDInformation, true))
+            {      
+                writer.WriteLine("EDID Information:");
+                writer.Write('\n');
+                int index = 11;
+                int counter = 0;
+                while(index < edidData.Length)
+                {   
+                    if(counter == 48){
+                        writer.Write("\n");
+                        counter = 0;
+                    }
+
+                    writer.Write(edidData[index]);
+                    counter++;
+                    index++;
+                }
+            }
 
             // Remove any whitespace characters from the EDID data
             edidData = edidData.Substring(startIndex).Replace(" ", string.Empty);
-
-            // Convert the hexadecimal string to bytes
-            byte[] edidBytes = new byte[edidData.Length / 2];
-            for (int i = 0; i < edidBytes.Length; i++)
-            {
-                edidBytes[i] = Convert.ToByte(edidData.Substring(i * 2, 2), 16);
-            }
 
             // Extract and format the different components of the EDID data
             string header = edidData.Substring(0,40);
@@ -447,36 +577,40 @@ class Process
             string supportedFeatures = edidData.Substring(48, 2);
             string colorCharacteristics = edidData.Substring(50, 20);
             string StandardTimingInfo = edidData.Substring(70, 40);
-            string refresh = edidData.Substring(310, 2);
-            Console.WriteLine(refresh);
+            string MaxVertRef = edidData.Substring(0, 2);
+
             string detailedTimingDescriptorBlock1 = edidData.Substring(108, 36);
             string detailedTimingDescriptorBlock2 = edidData.Substring(144, 36);
             string detailedTimingDescriptorBlock3 = edidData.Substring(180, 36);
             string detailedTimingDescriptorBlock4 = edidData.Substring(216, 36);
-            
+            string NumericString = edidData.Substring(186, 34);
+            string ManufactureDisplay = edidData.Substring(216,36);
             string extensionFlag = edidData.Substring(252, 4);
+            
+            //string secondCheckSum = edidData.Substring(510, 2);
             //string checksum = edidData.Substring(254, 2);
-
             
-            HeaderInfo(header);
-            BasicDisplayParameters(BasicDisplay);
-            SupportedFeaturesBitmap(supportedFeatures);
-            ChromaticCoordinates(colorCharacteristics);
-            TimingsInfo(StandardTimingInfo);
+            HeaderInfo(header,EDIDInformation);
+            BasicDisplayParameters(BasicDisplay,EDIDInformation);
+            SupportedFeaturesBitmap(supportedFeatures,EDIDInformation);
+            ChromaticCoordinates(colorCharacteristics,EDIDInformation);
+            TimingsInfo(StandardTimingInfo,MaxVertRef,EDIDInformation);
             
-    
             //Console.WriteLine("Color Characteristics: " + colorCharacteristics);
+            ProcessTimingBlock(detailedTimingDescriptorBlock1,EDIDInformation);
+            ProcessTimingBlock(detailedTimingDescriptorBlock2,EDIDInformation);
 
-            Console.WriteLine("Detailed Timing Descriptor Block 1: " + detailedTimingDescriptorBlock1);
-            ProcessTimingBlock(detailedTimingDescriptorBlock1);
-            Console.WriteLine("Detailed Timing Descriptor Block 2: " + detailedTimingDescriptorBlock2);
-            //ProcessTimingBlock(detailedTimingDescriptorBlock2);
-            Console.WriteLine("Detailed Timing Descriptor Block 3: " + detailedTimingDescriptorBlock3);
-            //ProcessTimingBlock(detailedTimingDescriptorBlock3);
-            Console.WriteLine("Detailed Timing Descriptor Block 4: " + detailedTimingDescriptorBlock4);
-            //ProcessTimingBlock(detailedTimingDescriptorBlock4);
+            AplhaData(NumericString,EDIDInformation);
+            ManuDisplayDescriptor(ManufactureDisplay,EDIDInformation);
+            // ProcessTimingBlock(detailedTimingDescriptorBlock3,EDIDInformation);
+            // ProcessTimingBlock(detailedTimingDescriptorBlock4,EDIDInformation);
 
-            ExtraFlags(extensionFlag);
+            ExtraFlags(extensionFlag,EDIDInformation);
+
+            //Console.WriteLine("Detailed Timing Descriptor Block 1: " + detailedTimingDescriptorBlock1);
+            //Console.WriteLine("Detailed Timing Descriptor Block 2: " + detailedTimingDescriptorBlock2);
+            //Console.WriteLine("Detailed Timing Descriptor Block 3: " + detailedTimingDescriptorBlock3);
+            //Console.WriteLine("Detailed Timing Descriptor Block 4: " + detailedTimingDescriptorBlock4);
 
         }
         else
@@ -484,10 +618,5 @@ class Process
             Console.WriteLine("Invalid EDID data.");
         }   
     }
-    static void Main()
-    {
-        //string filePath = "Edid_data.txt";
-        string filePath = "output.txt";
-        ProcessEDID(filePath);
-    }
+    
 }

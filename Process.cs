@@ -447,7 +447,8 @@ class Process
             string supportedFeatures = edidData.Substring(48, 2);
             string colorCharacteristics = edidData.Substring(50, 20);
             string StandardTimingInfo = edidData.Substring(70, 40);
-
+            string refresh = edidData.Substring(310, 2);
+            Console.WriteLine(refresh);
             string detailedTimingDescriptorBlock1 = edidData.Substring(108, 36);
             string detailedTimingDescriptorBlock2 = edidData.Substring(144, 36);
             string detailedTimingDescriptorBlock3 = edidData.Substring(180, 36);

@@ -1,0 +1,98 @@
+EDID Information:
+
+00 FF FF FF FF FF FF 00 4C 83 64 41 00 00 00 00 
+0B 1F 01 04 B5 22 16 78 02 0C F1 AE 52 3C B9 23 
+0C 50 54 00 00 00 01 01 01 01 01 01 01 01 01 01 
+01 01 01 01 01 01 71 DF 00 50 F0 60 20 90 20 08 
+88 00 58 D7 10 00 00 1B 71 DF 00 50 F0 60 20 90 
+20 08 88 00 58 D7 10 00 00 1B 00 00 00 FE 00 44 
+33 4B 4A 46 80 31 36 30 59 56 30 33 00 00 00 00 
+00 03 04 03 00 01 00 00 00 0B 01 0A 20 20 01 F8 
+02 03 0F 00 E3 05 80 00 E6 06 05 01 74 60 07 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 B7
+
+
+Header: 00FFFFFFFFFFFF00
+Manufacturer ID: SDC
+Product ID Code: 4164h
+Serial Number: 00000000h
+Manufacture Week: 11
+Manufacture Year: 2021
+EDID Version #: 01
+EDID Revision #: 04
+Video Input Type: Digital
+Color Bit Depth: 10 Bits per Primary Color
+Display Port is supported
+Horizontal Size: 34 cm
+Vertical Size: 22 cm
+Display Gamma: 2.2
+Display Frequency is continuous frequency: No
+Preferred Timing Mode includes the native pixel format and preferred refresh rate of display device: Yes
+sRGB Standard is the default color space: No
+Supported Color Encoding Formats: RGB:4:4:4
+Active Off: No
+Suspend Mode: No
+Standby Mode: No
+Red X Value: 0.67969
+Red Y Value: 0.32031
+Green X Value: 0.2373
+Green Y Value: 0.72266
+Blue X Value: 0.13965
+Blue Y Value: 0.0498
+White X Value: 0.3125
+White Y Value: 0.3291
+Established Support Timings: 0000
+Manufacturer's Reserved Timing: 00
+EDID Standard Timings Supported: 01010101010101010101010101010101
+Refresh Rate: 60(Hz)
+Detailed Timing: 
+Pixel Clock: 572.01 MHz
+Horizontal Active Width: 3840 pixels
+Horizontal Blanking Width: 80 pixels
+Horizontal Addressable Width: 344 mm
+Horizontal Front Porch: 32 pixels
+Horizontal Sync Pulse: 8 pixels
+Horizontal Border: 0 pixels
+Vertical Active Width: 2400 lines
+Vertical Blanking Width: 32 lines
+Vertical Addressable Width: 215 mm
+Vertical Front Porch: 8 lines
+Vertical Sync Pulse: 8 lines
+Vertical Border: 0 lines
+Sync Signal Information:
+Interlaced: no
+Stereo Viewing Support: 2-way interleaved, right image on even lines
+Sync Type: Digital Separate
+Vertical Sync: Negative
+Horizontal Sync: Positive
+Detailed Timing: 
+Pixel Clock: 572.01 MHz
+Horizontal Active Width: 3840 pixels
+Horizontal Blanking Width: 80 pixels
+Horizontal Addressable Width: 344 mm
+Horizontal Front Porch: 32 pixels
+Horizontal Sync Pulse: 8 pixels
+Horizontal Border: 0 pixels
+Vertical Active Width: 2400 lines
+Vertical Blanking Width: 32 lines
+Vertical Addressable Width: 215 mm
+Vertical Front Porch: 8 lines
+Vertical Sync Pulse: 8 lines
+Vertical Border: 0 lines
+Sync Signal Information:
+Interlaced: no
+Stereo Viewing Support: 2-way interleaved, right image on even lines
+Sync Type: Digital Separate
+Vertical Sync: Negative
+Horizontal Sync: Positive
+Alpha numeric String: D3KJF160YV03
+Manufacturer (00h) Display Descriptor: 000000000003040300010000000B010A2020
+Extension Flag: 01h
+Checksum: F8h
+Manual Checksum: 0 (Should Equal 0)

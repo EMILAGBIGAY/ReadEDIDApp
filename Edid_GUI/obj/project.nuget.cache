@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "Wpf92MEP/rBfaSgcR45iOKjoRPmpyrW3xiHLw8FIW1XSfRX6g00mIdjD3N2Uzyq5H1XS01u2HP34q8X9KFECsw==",
+  "success": true,
+  "projectFilePath": "c:\\Users\\MayaB\\source\\repos\\Edid_GUI\\Edid_GUI\\Edid_GUI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MayaB\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.22621.28\\microsoft.windows.sdk.net.ref.10.0.22621.28.nupkg.sha512"
+  ],
+  "logs": []
+}

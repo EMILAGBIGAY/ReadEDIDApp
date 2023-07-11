@@ -1,13 +1,14 @@
-﻿using System.ComponentModel;
-using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms.VisualStyles;
+﻿using System.Diagnostics.CodeAnalysis;
 using Windows.Devices.Display;
 using Windows.Devices.Enumeration;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
+
 
 namespace Edid_GUI
-{
+{   static class fileGlobal
+    {
+        public static List<string> files = new List<string>();
+        public static List<string> EDIDInfo = new List<string>();
+    }
     public class Reader
     {
         [SuppressMessage("Microsoft.Usage", "CA1416:ThisCallSiteIsReachableOnAllPlatforms", Justification = "Intentionally targeting Windows platform.")]
@@ -16,24 +17,24 @@ namespace Edid_GUI
         {
             var devices = new EnumerateDevices(DisplayMonitor.GetDeviceSelector());
 
-            List<string> files = new List<string>();
-            List<string> EDIDInfo = new List<string>();
+            
 
             for (int i = 1; i <= devices.numDevices(); i++)
             {
-                files.Add("output" + i + ".txt");
-                EDIDInfo.Add("EDIDInformation" + i + ".txt");
+                fileGlobal.files.Add("output" + i + ".txt");
+                fileGlobal.EDIDInfo.Add("EDIDInformation" + i + ".txt");
             }
 
-            for (int i = 0; i < files.Count; i++)
+            for (int i = 0; i < fileGlobal.files.Count; i++)
             {
-                devices.EnumDisplay(files[i], i);
+                devices.EnumDisplay(fileGlobal.files[i], i);
 
                 process processInstance = new process();
-                using (StreamWriter writer = new StreamWriter(EDIDInfo[i])) { }
-                processInstance.ParseEDID(files[i], EDIDInfo[i]);
+                using (StreamWriter writer = new StreamWriter(fileGlobal.EDIDInfo[i])) { }
+                processInstance.ParseEDID(fileGlobal.files[i], fileGlobal.EDIDInfo[i]);
             }
-        }  
+        }
+
 
         class EnumerateDevices
         {   
@@ -66,10 +67,8 @@ namespace Edid_GUI
                 byte[] EDID = display.GetDescriptor(DisplayMonitorDescriptorKind.Edid);
 
                 string hexBuffer = BitConverter.ToString(EDID).Replace("-", " ");
-                //Console.Write(hexBuffer + "\n");
                 using (StreamWriter writer = new StreamWriter(outputFilePath))
                 {
-                    writer.Write("\"EDID\"=hex:");
                     writer.WriteLine(hexBuffer + "\n");
                 }
             }

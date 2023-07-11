@@ -18,6 +18,7 @@ EDID Information:
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 4B
 
 
+Manual Checksum: 0 (Should Equal 0)
 Header: 00FFFFFFFFFFFF00
 Manufacturer ID: DEL
 Product ID Code: D08Eh
@@ -91,4 +92,3 @@ Serration: Without
 Sync on red and blue lines additionally to green: sync on all three (RGB) video signals
 Extension Flag: 01h
 Checksum: 62h
-Manual Checksum: 0 (Should Equal 0)

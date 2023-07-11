@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-
-
-class process
+﻿class process
 {
     static void HeaderInfo(string edidData, string file)
     {
@@ -537,7 +532,6 @@ class process
                 index++;
                 count += 2;
             }
-            //string alphStr = new string(alph); 
             int nullCount = Array.IndexOf(alph, '\0');
             if (nullCount >= 0)
             {
@@ -582,14 +576,12 @@ class process
             throw new ArgumentException("Hex data length must be 256 characters.", nameof(hexData));
 
         byte[] data = new byte[128];
-
         for (int i = 0; i < 128; i++)
         {
             data[i] = Convert.ToByte(hexData.Substring(i * 2, 2), 16);
         }
 
         byte checksum = 0;
-
         for (int i = 0; i < data.Length; i++)
         {
             checksum += data[i];
@@ -603,84 +595,80 @@ class process
     {
         string edidData = File.ReadAllText(filePath);
 
-        int startIndex = edidData.IndexOf("\"EDID\"=hex:");
-        if (startIndex != -1)
-        {
-            startIndex += "\"EDID\"=hex:".Length;
 
-            using (StreamWriter writer = new StreamWriter(EDIDInformation, true))
+        using (StreamWriter writer = new StreamWriter(EDIDInformation, true))
+        {
+            writer.WriteLine("EDID Information:");
+            writer.Write('\n');
+            int index = 0;
+            int counter = 0;
+            while (index < edidData.Length)
             {
-                writer.WriteLine("EDID Information:");
-                writer.Write('\n');
-                int index = 11;
-                int counter = 0;
-                while (index < edidData.Length)
+                if (counter == 48)
                 {
-                    if (counter == 48)
-                    {
-                        writer.WriteLine();
-                        counter = 0;
-                    }
-
-                    writer.Write(edidData[index]);
-                    counter++;
-                    index++;
+                    writer.WriteLine();
+                    counter = 0;
                 }
+
+                writer.Write(edidData[index]);
+                counter++;
+                index++;
             }
-
-            edidData = edidData.Substring(startIndex).Replace(" ", string.Empty);
-
-            // Extract and format the different components of the EDID data
-            string header = edidData.Substring(0, 40);
-            string BasicDisplay = edidData.Substring(40, 8);
-            string supportedFeatures = edidData.Substring(48, 2);
-            string colorCharacteristics = edidData.Substring(50, 20);
-            string StandardTimingInfo = edidData.Substring(70, 40);
-            string MaxVertRef = edidData.Substring(0, 2);
-
-            string detailedTimingDescriptorBlock1 = edidData.Substring(108, 36);
-            string detailedTimingDescriptorBlock2 = edidData.Substring(144, 36);
-            string detailedTimingDescriptorBlock3 = edidData.Substring(180, 36);
-            string detailedTimingDescriptorBlock4 = edidData.Substring(216, 36);
-            string NumericString = edidData.Substring(186, 34);
-            string ManufactureDisplay = edidData.Substring(216, 36);
-            string extensionFlag = edidData.Substring(252, 4);
-            string manualChecksum = edidData.Substring(0, 256);
-
-            //256
-
-
-            //string secondCheckSum = edidData.Substring(510, 2);
-            //string checksum = edidData.Substring(254, 2);
-
-            HeaderInfo(header, EDIDInformation);
-            BasicDisplayParameters(BasicDisplay, EDIDInformation);
-            SupportedFeaturesBitmap(supportedFeatures, EDIDInformation);
-            ChromaticCoordinates(colorCharacteristics, EDIDInformation);
-            TimingsInfo(StandardTimingInfo, MaxVertRef, EDIDInformation);
-
-            //Console.WriteLine("Color Characteristics: " + colorCharacteristics);
-            ProcessTimingBlock(detailedTimingDescriptorBlock1, EDIDInformation);
-            ProcessTimingBlock(detailedTimingDescriptorBlock2, EDIDInformation);
-
-            AplhaData(NumericString, EDIDInformation);
-            ManuDisplayDescriptor(ManufactureDisplay, EDIDInformation);
-            // ProcessTimingBlock(detailedTimingDescriptorBlock3,EDIDInformation);
-            // ProcessTimingBlock(detailedTimingDescriptorBlock4,EDIDInformation);
-
-            ExtraFlags(extensionFlag, EDIDInformation);
-            CalculateChecksum(manualChecksum, EDIDInformation);
-
-            //Console.WriteLine("Detailed Timing Descriptor Block 1: " + detailedTimingDescriptorBlock1);
-            //Console.WriteLine("Detailed Timing Descriptor Block 2: " + detailedTimingDescriptorBlock2);
-            //Console.WriteLine("Detailed Timing Descriptor Block 3: " + detailedTimingDescriptorBlock3);
-            //Console.WriteLine("Detailed Timing Descriptor Block 4: " + detailedTimingDescriptorBlock4);
-
         }
-        else
-        {
-            Console.WriteLine("Invalid EDID data.");
-        }
+
+        edidData = edidData.Replace(" ", string.Empty);
+
+        // Extract and format the different components of the EDID data
+        
+        string header = edidData.Substring(0, 40);
+        string BasicDisplay = edidData.Substring(40, 8);
+        string supportedFeatures = edidData.Substring(48, 2);
+        string colorCharacteristics = edidData.Substring(50, 20);
+        string StandardTimingInfo = edidData.Substring(70, 40);
+        string MaxVertRef = edidData.Substring(0, 2);
+
+        string detailedTimingDescriptorBlock1 = edidData.Substring(108, 36);
+        string detailedTimingDescriptorBlock2 = edidData.Substring(144, 36);
+        string detailedTimingDescriptorBlock3 = edidData.Substring(180, 36);
+        string detailedTimingDescriptorBlock4 = edidData.Substring(216, 36);
+        string NumericString = edidData.Substring(186, 34);
+        string ManufactureDisplay = edidData.Substring(216, 36);
+        string extensionFlag = edidData.Substring(252, 4);
+        string manualChecksum = edidData.Substring(0, 256);
+
+
+        //256
+
+
+        //string secondCheckSum = edidData.Substring(510, 2);
+        //string checksum = edidData.Substring(254, 2);
+
+        CalculateChecksum(manualChecksum, EDIDInformation);
+        HeaderInfo(header, EDIDInformation);
+      
+        BasicDisplayParameters(BasicDisplay, EDIDInformation);
+        SupportedFeaturesBitmap(supportedFeatures, EDIDInformation);
+        ChromaticCoordinates(colorCharacteristics, EDIDInformation);
+        TimingsInfo(StandardTimingInfo, MaxVertRef, EDIDInformation);
+
+        //Console.WriteLine("Color Characteristics: " + colorCharacteristics);
+        ProcessTimingBlock(detailedTimingDescriptorBlock1, EDIDInformation);
+        ProcessTimingBlock(detailedTimingDescriptorBlock2, EDIDInformation);
+
+        AplhaData(NumericString, EDIDInformation);
+        ManuDisplayDescriptor(ManufactureDisplay, EDIDInformation);
+        // ProcessTimingBlock(detailedTimingDescriptorBlock3,EDIDInformation);
+        // ProcessTimingBlock(detailedTimingDescriptorBlock4,EDIDInformation);
+
+        ExtraFlags(extensionFlag, EDIDInformation);
+        
+
+        //Console.WriteLine("Detailed Timing Descriptor Block 1: " + detailedTimingDescriptorBlock1);
+        //Console.WriteLine("Detailed Timing Descriptor Block 2: " + detailedTimingDescriptorBlock2);
+        //Console.WriteLine("Detailed Timing Descriptor Block 3: " + detailedTimingDescriptorBlock3);
+        //Console.WriteLine("Detailed Timing Descriptor Block 4: " + detailedTimingDescriptorBlock4);
+
+        
     }
 
 }

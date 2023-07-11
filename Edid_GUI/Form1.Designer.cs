@@ -1,4 +1,6 @@
-﻿namespace Edid_GUI
+﻿using System.Windows.Forms;
+
+namespace Edid_GUI
 {
     partial class Form1
     {
@@ -35,10 +37,10 @@
             // 
             // ShowEDID
             // 
-            ShowEDID.Location = new Point(359, 157);
-            ShowEDID.Margin = new Padding(1);
+            ShowEDID.Location = new Point(872, 429);
+            ShowEDID.Margin = new Padding(2, 3, 2, 3);
             ShowEDID.Name = "ShowEDID";
-            ShowEDID.Size = new Size(229, 108);
+            ShowEDID.Size = new Size(556, 295);
             ShowEDID.TabIndex = 0;
             ShowEDID.Text = "Get EDID";
             ShowEDID.UseVisualStyleBackColor = true;
@@ -46,10 +48,10 @@
             // 
             // CompareEDID
             // 
-            CompareEDID.Location = new Point(359, 304);
-            CompareEDID.Margin = new Padding(1);
+            CompareEDID.Location = new Point(872, 831);
+            CompareEDID.Margin = new Padding(2, 3, 2, 3);
             CompareEDID.Name = "CompareEDID";
-            CompareEDID.Size = new Size(229, 108);
+            CompareEDID.Size = new Size(556, 295);
             CompareEDID.TabIndex = 1;
             CompareEDID.Text = "Compare";
             CompareEDID.UseVisualStyleBackColor = true;
@@ -57,16 +59,44 @@
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(993, 615);
+            ClientSize = new Size(2412, 1681);
             Controls.Add(CompareEDID);
             Controls.Add(ShowEDID);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(1);
+            Margin = new Padding(2, 3, 2, 3);
             Name = "Form1";
             Text = "EDID Validation";
+            this.FormClosing += ApplicationExitHandler;
             ResumeLayout(false);
+        }
+
+        public void ApplicationExitHandler(object sender, EventArgs e)
+        {
+            try
+            {
+
+                for (int i = 0; i < fileGlobal.files.Count; i++)
+                {
+                    string filePath1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileGlobal.files[i]);
+                    string filePath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileGlobal.EDIDInfo[i]);
+                    if (File.Exists(fileGlobal.files[i]) && File.Exists(fileGlobal.EDIDInfo[i]))
+                    {
+                        File.Delete(fileGlobal.files[i]);
+                        File.Delete(fileGlobal.EDIDInfo[i]);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("File does not exist.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting file: {ex.Message}");
+            }
         }
 
         #endregion

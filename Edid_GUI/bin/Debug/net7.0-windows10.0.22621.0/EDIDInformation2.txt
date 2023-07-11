@@ -18,6 +18,7 @@ EDID Information:
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 B7
 
 
+Manual Checksum: 0 (Should Equal 0)
 Header: 00FFFFFFFFFFFF00
 Manufacturer ID: SDC
 Product ID Code: 4164h
@@ -95,4 +96,3 @@ Alpha numeric String: D3KJF160YV03
 Manufacturer (00h) Display Descriptor: 000000000003040300010000000B010A2020
 Extension Flag: 01h
 Checksum: F8h
-Manual Checksum: 0 (Should Equal 0)

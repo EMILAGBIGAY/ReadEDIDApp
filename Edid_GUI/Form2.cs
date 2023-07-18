@@ -5,6 +5,7 @@
         public Form2()
         {
             InitializeComponent();
+            AutoScaleMode = AutoScaleMode.Dpi;
         }
 
         private void textBox1_TextChanged(object sender, KeyPressEventArgs e)

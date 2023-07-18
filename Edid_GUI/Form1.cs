@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace Edid_GUI
 {
     public partial class Form1 : Form
@@ -8,8 +10,6 @@ namespace Edid_GUI
             Reader edid = new Reader();
             edid.Runner();
         }
-
-        //show
         private void button1_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < fileGlobal.EDIDInfo.Count; i++)
@@ -19,7 +19,7 @@ namespace Edid_GUI
                 {
                     string fileContents1 = File.ReadAllText(filePath1);
                     int num = i + 1;
-                    using (var scrollableDialog = new ScrollableMessageBox(fileContents1, "EDID Display "+num))
+                    using (var scrollableDialog = new ScrollableMessageBox(filePath1, "EDID Display " + num))
                     {
                         scrollableDialog.ShowDialog();
                     }
@@ -33,10 +33,10 @@ namespace Edid_GUI
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            string filePath1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EDIDInformation1.txt");
-            string filePath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EDIDInformation2.txt");
+            //will take edid from database
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EDIDInformation1.txt");
 
-            string file2Content = File.ReadAllText(filePath2);
+            string fileContent = File.ReadAllText(filePath);
 
             Form2 readPN = new Form2();
             readPN.ShowDialog();
@@ -44,11 +44,21 @@ namespace Edid_GUI
             {
                 string box = readPN.boxValue();
                 string partNum = box.Substring(3, 5);
-                //KR0D3KJF71763815E11N
+                //edidinformation1.txt
                 if (File.Exists(box) || partNum == "D3KJF")
                 {
-                    ScrollableMessageBoxDouble form2 = new ScrollableMessageBoxDouble(filePath2, filePath2, "Compare EDIDs");
-                    ScrollableMessageBox correctComp = new ScrollableMessageBox(file2Content, "Correct EDID");
+                    ScrollableMessageBoxDouble form2 = new ScrollableMessageBoxDouble("Compare EDIDs");
+
+                    /*
+                    fileGlobal.CompareEF.Add("dbOut.txt");
+                    fileGlobal.OutEdid.Add("EDIDdatabase.txt");
+                    process correctDB = new process();
+                    using (StreamWriter writer = new StreamWriter(fileGlobal.EDIDInfo[fileGlobal.EDIDInfo.Count()-1])) { }
+                    correctDB.ParseEDID(fileGlobal.files[fileGlobal.files.Count() - 1], fileGlobal.EDIDInfo[fileGlobal.EDIDInfo.Count() - 1]);
+
+                    */
+
+                    ScrollableMessageBox correctComp = new ScrollableMessageBox(fileContent, "Correct EDID");
 
                     Screen screen = Screen.PrimaryScreen;
                     Rectangle bounds = screen.Bounds;
@@ -81,29 +91,32 @@ namespace Edid_GUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Bad Data Reading: Re-Enter Data");
+                MessageBox.Show("can't find part number");
                 return;
             }
-            
+
         }
     }
 
     public class ScrollableMessageBox : Form
     {
+        public string file;
+        private RichTextBox messageTextBox;
         public ScrollableMessageBox(string message, string title)
         {
             InitializeComponent();
-
+            AutoScaleMode = AutoScaleMode.Dpi;
             // Set the message and title
             messageTextBox.Text = message;
+            file = message;
             Text = title;
         }
 
-        private TextBox messageTextBox;
+
 
         private void InitializeComponent()
-        {   
-            messageTextBox = new TextBox();
+        {
+            messageTextBox = new RichTextBox();
             SuspendLayout();
             // 
             // messageTextBox
@@ -111,7 +124,8 @@ namespace Edid_GUI
             messageTextBox.Dock = DockStyle.Fill;
             messageTextBox.Multiline = true;
             messageTextBox.ReadOnly = true;
-            messageTextBox.ScrollBars = ScrollBars.Vertical;
+            messageTextBox.ScrollBars = RichTextBoxScrollBars.Vertical;
+            this.Load += highlightFiles;
             // 
             // ScrollableMessageBox
             // 
@@ -124,55 +138,85 @@ namespace Edid_GUI
             ResumeLayout(false);
             PerformLayout();
         }
+        private void highlightFiles(object sender, EventArgs e)
+        {
+            string filePath = file;
+
+            try
+            {
+                string fileContent = File.ReadAllText(filePath);
+                messageTextBox.Text = fileContent;
+
+                string keyword = "Pass";
+                int index = 0;
+
+                while (index < messageTextBox.TextLength)
+                {
+                    int keywordIndex = messageTextBox.Find(keyword, index, RichTextBoxFinds.None);
+
+                    if (keywordIndex >= 0)
+                    {
+                        messageTextBox.Select(keywordIndex - 20, keyword.Length + 21);
+                        messageTextBox.SelectionColor = Color.Green;
+                        index = keywordIndex + keyword.Length;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                string keyword2 = "Fail";
+                int badindex = 0;
+
+                while (index < messageTextBox.TextLength)
+                {
+                    int keywordIndex = messageTextBox.Find(keyword2, index, RichTextBoxFinds.None);
+
+                    if (keywordIndex >= 0)
+                    {
+                        messageTextBox.Select(keywordIndex - 20, keyword2.Length + 21);
+                        messageTextBox.SelectionColor = Color.Green;
+                        index = keywordIndex + keyword.Length;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that may occur during file reading or comparison
+                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
     public class ScrollableMessageBoxDouble : Form
-    {   
-        public ScrollableMessageBoxDouble(string filePath1, string filePath2, string title)
+    {
+        public ScrollableMessageBoxDouble(string title)
         {
             InitializeComponent();
             Text = title;
-            string fileContents1;
-
-            try
-            {
-                fileContents1 = File.ReadAllText(filePath1);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error reading file 1: {ex.Message}");
-                return;
-            }
-
-            string fileContents2;
-            try
-            {
-                fileContents2 = File.ReadAllText(filePath2);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error reading file 2: {ex.Message}");
-                return;
-            }
 
         }
 
-        //private TableLayoutPanel tableLayoutPanel;
         private RichTextBox richTextBox1;
 
         private void InitializeComponent()
         {
-            //tableLayoutPanel = new TableLayoutPanel();
             richTextBox1 = new RichTextBox();
-            
+
             SuspendLayout();
-            
+
             richTextBox1.Dock = DockStyle.Fill;
             richTextBox1.ReadOnly = true;
             richTextBox1.ScrollBars = RichTextBoxScrollBars.Vertical;
             Controls.Add(richTextBox1);
             this.Load += CompareFiles;
-            
-            
+
+
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1300, 700);
@@ -184,7 +228,7 @@ namespace Edid_GUI
 
         private void CompareFiles(object sender, EventArgs e)
         {
-            string firstFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EDIDInformation2.txt");
+            string firstFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EDIDInformation1.txt");
             string secondFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EDIDInformation2.txt");
 
             try
@@ -193,7 +237,6 @@ namespace Edid_GUI
                 List<string> secondLines = File.ReadAllLines(secondFilePath).ToList();
 
                 richTextBox1.Lines = firstLines.ToArray();
-                //richTextBox2.Lines = secondLines.ToArray();
 
                 int lineCount = Math.Min(firstLines.Count, secondLines.Count);
 
@@ -223,7 +266,6 @@ namespace Edid_GUI
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during file reading or comparison
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -1,0 +1,15 @@
+C:\Users\MayaB\source\repos\Edid_GUI\LCDVerification\Images\SplashScreen.scale-200.png
+C:\Users\MayaB\source\repos\Edid_GUI\LCDVerification\Images\LockScreenLogo.scale-200.png
+C:\Users\MayaB\source\repos\Edid_GUI\LCDVerification\Images\Square150x150Logo.scale-200.png
+C:\Users\MayaB\source\repos\Edid_GUI\LCDVerification\Images\Square44x44Logo.scale-200.png
+C:\Users\MayaB\source\repos\Edid_GUI\LCDVerification\Images\Square44x44Logo.targetsize-24_altform-unplated.png
+C:\Users\MayaB\source\repos\Edid_GUI\LCDVerification\Images\StoreLogo.png
+C:\Users\MayaB\source\repos\Edid_GUI\LCDVerification\Images\Wide310x150Logo.scale-200.png
+C:\Users\MayaB\source\repos\Edid_GUI\LCDVerification\bin\AnyCPU\Debug\resources.pri
+C:\Users\MayaB\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.22621.28\lib\net6.0\Microsoft.Windows.SDK.NET.dll
+C:\Users\MayaB\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.22621.28\lib\net6.0\WinRT.Runtime.dll
+C:\Users\MayaB\source\repos\EDID_GUI\Edid_GUI\bin\Debug\net7.0-windows10.0.22621.0\Edid_GUI.deps.json
+C:\Users\MayaB\source\repos\Edid_GUI\Edid_GUI\obj\Debug\net7.0-windows10.0.22621.0\apphost.exe
+C:\Users\MayaB\source\repos\EDID_GUI\Edid_GUI\bin\Debug\net7.0-windows10.0.22621.0\Edid_GUI.runtimeconfig.json
+C:\Users\MayaB\source\repos\EDID_GUI\Edid_GUI\bin\Debug\net7.0-windows10.0.22621.0\Edid_GUI.dll
+C:\Users\MayaB\source\repos\EDID_GUI\Edid_GUI\bin\Debug\net7.0-windows10.0.22621.0\Edid_GUI.pdb

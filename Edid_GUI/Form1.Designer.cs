@@ -37,7 +37,7 @@ namespace Edid_GUI
             // 
             // ShowEDID
             // 
-            ShowEDID.Location = new Point(872, 429);
+            ShowEDID.Location = new Point(858, 380);
             ShowEDID.Margin = new Padding(2, 3, 2, 3);
             ShowEDID.Name = "ShowEDID";
             ShowEDID.Size = new Size(556, 295);
@@ -48,7 +48,7 @@ namespace Edid_GUI
             // 
             // CompareEDID
             // 
-            CompareEDID.Location = new Point(872, 831);
+            CompareEDID.Location = new Point(858, 759);
             CompareEDID.Margin = new Padding(2, 3, 2, 3);
             CompareEDID.Name = "CompareEDID";
             CompareEDID.Size = new Size(556, 295);
@@ -68,7 +68,7 @@ namespace Edid_GUI
             Margin = new Padding(2, 3, 2, 3);
             Name = "Form1";
             Text = "EDID Validation";
-            this.FormClosing += ApplicationExitHandler;
+            FormClosing += ApplicationExitHandler;
             ResumeLayout(false);
         }
 
@@ -76,7 +76,7 @@ namespace Edid_GUI
         {
             try
             {
-
+                Console.WriteLine("no");
                 for (int i = 0; i < fileGlobal.files.Count; i++)
                 {
                     string filePath1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileGlobal.files[i]);

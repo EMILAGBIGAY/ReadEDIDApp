@@ -582,19 +582,31 @@
         }
 
         byte checksum = 0;
+        string pF = "";
         for (int i = 0; i < data.Length; i++)
         {
             checksum += data[i];
         }
+
+        if(checksum == 0)
+        {
+            pF = "(Pass)";
+        }
+        else
+        {
+            pF = "(Fail)";
+        }
+
         using (StreamWriter writer = new StreamWriter(file, true))
         {
-            writer.WriteLine("Manual Checksum: " + checksum + " (Should Equal 0)");
+            writer.WriteLine("Manual Checksum: " + checksum + " "+pF);
+            writer.WriteLine();
         }
+
     }
     public void ParseEDID(string filePath, string EDIDInformation)
     {
         string edidData = File.ReadAllText(filePath);
-
 
         using (StreamWriter writer = new StreamWriter(EDIDInformation, true))
         {
@@ -642,7 +654,7 @@
 
         //string secondCheckSum = edidData.Substring(510, 2);
         //string checksum = edidData.Substring(254, 2);
-
+        AplhaData(NumericString, EDIDInformation);
         CalculateChecksum(manualChecksum, EDIDInformation);
         HeaderInfo(header, EDIDInformation);
       
@@ -655,7 +667,7 @@
         ProcessTimingBlock(detailedTimingDescriptorBlock1, EDIDInformation);
         ProcessTimingBlock(detailedTimingDescriptorBlock2, EDIDInformation);
 
-        AplhaData(NumericString, EDIDInformation);
+        
         ManuDisplayDescriptor(ManufactureDisplay, EDIDInformation);
         // ProcessTimingBlock(detailedTimingDescriptorBlock3,EDIDInformation);
         // ProcessTimingBlock(detailedTimingDescriptorBlock4,EDIDInformation);

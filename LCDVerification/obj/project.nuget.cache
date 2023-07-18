@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "K65PLAmfVhKvf6Dvkmntc57C6ek8w3LEyQra/F8W+OZmzZJof2sdOIxv+q6C2WoGuMghoN9z9BJ4k6JOw9/0Bw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\MayaB\\source\\repos\\EDID_GUI\\LCDVerification\\LCDVerification.wapproj",
+  "expectedPackageFiles": [
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages\\microsoft.windows.sdk.buildtools\\10.0.22621.756\\microsoft.windows.sdk.buildtools.10.0.22621.756.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -8,6 +8,8 @@ namespace Edid_GUI
     {
         public static List<string> files = new List<string>();
         public static List<string> EDIDInfo = new List<string>();
+        public static List<string> CompareEF = new List<string>();
+        public static List<string> OutEdid = new List<string>();
     }
     public class Reader
     {
